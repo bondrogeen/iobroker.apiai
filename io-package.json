@@ -1,0 +1,41 @@
+{
+    "common": {
+        "name":                     "apiai",
+        "version":                  "0.0.1",
+	    "news": {
+			"0.0.1": {
+			  "en": "beta version",
+			  "de": "Betaversion",
+			  "ru": "Бета версия"
+			},
+			"0.0.1": {
+			  "en": "initial adapter",
+			  "de": "Initiale Version",
+			  "ru": "Первоначальный адаптер"
+			}
+		},
+        "title":                    "Javascript/Node.js based apiai adapter",
+        "desc":                     {
+				 "en": "ioBroker apiai Adapter",
+				 "de": "ioBroker Apiai Adapter",
+				 "ru": "ioBroker Apiai драйвер как образец"
+		},
+        "platform":                 "Javascript/Node.js",
+        "mode":                     "daemon",
+        "icon":                     "apiai.png",
+        "enabled":                  true,
+		"extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.apiai/master/admin/apiai.png",
+		"keywords":                 ["apiai", "vis", "GUI", "graphical", "scada"],
+        "readme":                   "https://github.com/ioBroker/ioBroker.apiai/blob/master/README.md",
+		"loglevel":                 "info",
+        "type":                     "common adapters",
+        "restartAdapters":          ["vis"]
+    },
+    "native": {
+        "test1": true,
+        "test2": 42
+    },
+    "objects": [
+
+    ]
+}
