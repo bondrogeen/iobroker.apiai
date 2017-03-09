@@ -23,7 +23,7 @@
         "platform":                 "Javascript/Node.js",
         "mode":                     "daemon",
         "icon":                     "apiai.png",
-        "enabled":                  true,
+        "enabled":                  false,
 		"extIcon":                  "https://raw.githubusercontent.com/ioBroker/ioBroker.apiai/master/admin/apiai.png",
 		"keywords":                 ["apiai", "vis", "GUI", "graphical", "scada"],
         "readme":                   "https://github.com/ioBroker/ioBroker.apiai/blob/master/README.md",
