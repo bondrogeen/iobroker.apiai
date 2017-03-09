@@ -45,37 +45,38 @@ adapter.on('message', function (obj) {
 
 
 adapter.on('ready', function () {
-    main();
+    if(adapter.config.token!="") {
+
+        main();
+    }
+
 });
 
-function main() {
-    apiai("привет")
+function main(){
+    apiai("привет");
     adapter.log.info('config test1: ' + adapter.config.token);
-
 }
 
 function apiai(textRequest) {
 
-    if(adapter.config.token){
+    adapter.log.info('ok ' + adapter.config.token);
 
-        var app = apiai(adapter.config.token);
+    var app = apiai(adapter.config.token);
 
-        var request = app.textRequest(textRequest, {
-            sessionId: '1234567'
-        });
+    var request = app.textRequest(textRequest, {
+        sessionId: '1234567'
+    });
 
-        request.on('response', function(response) {
-            adapter.log.info(JSON.stringify(response));
-        });
+    request.on('response', function(response) {
+        adapter.log.info(JSON.stringify(response));
+    });
 
-        request.on('error', function(error) {
-            adapter.log.info(JSON.stringify(error));
+    request.on('error', function(error) {
+        adapter.log.info(JSON.stringify(error));
 
-        });
+    });
 
-        request.end();
-    }
-
+    request.end();
 
 }
 
