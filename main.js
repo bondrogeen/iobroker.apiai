@@ -65,3 +65,4 @@ function main() {
     adapter.subscribeStates('*');
 
 }
+
