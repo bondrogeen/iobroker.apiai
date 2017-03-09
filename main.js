@@ -24,11 +24,10 @@ adapter.on('objectChange', function (id, obj) {
 adapter.on('stateChange', function (id, state) {
     // Warning, state can be null if it was deleted
     adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
-
-    // you can use the ack flag to detect if it is status (true) or command (false)
-    if (state && !state.ack) {
-        adapter.log.info('ack is not set!');
+    if(id==adapter.namespace +'.request.request'){
+        setapiai(state.val);
     }
+
 });
 
 adapter.on('message', function (obj) {
@@ -46,37 +45,64 @@ adapter.on('message', function (obj) {
 
 adapter.on('ready', function () {
     if(adapter.config.token!="") {
-
+        adapter.log.info('main start ');
         main();
+        setapiai('привет');
+    }else{
+        adapter.log.info('Not a valid token' );
     }
 
 });
 
 function main(){
-    apiai("привет");
+
     adapter.log.info('config test1: ' + adapter.config.token);
+    newVar("respons","respons")
+    newVar("request","request")
+
+    adapter.subscribeStates('*');
+
+
+
 }
 
-function apiai(textRequest) {
+function newVar(setid,value){
+    adapter.setObject(setid+"."+value, {
+        type: 'state',
+        common: {
+            name: value,
+            type: 'mixed',
+            role: 'indicator'
+        },
+        native: {}
+    });
+}
 
-    adapter.log.info('ok ' + adapter.config.token);
-
+function setapiai(textRequest) {
     var app = apiai(adapter.config.token);
-
     var request = app.textRequest(textRequest, {
         sessionId: '1234567'
     });
 
     request.on('response', function(response) {
-        adapter.log.info(JSON.stringify(response));
+        adapter.log.info("respons "+JSON.stringify(response));
+        adapter.setState('respons.respons', {val: JSON.stringify(response), ack: true});
+
+        JSON.parse(JSON.stringify(response), function(k, v) {
+            if(typeof v != "object"){
+                newVar("respons.test",k)
+                adapter.setState('respons.test.'+k, {val: v, ack: true});
+            }
+        });
     });
 
     request.on('error', function(error) {
-        adapter.log.info(JSON.stringify(error));
+        adapter.log.warn("error "+JSON.stringify(error));
 
     });
 
     request.end();
 
 }
+
 
