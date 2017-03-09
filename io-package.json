@@ -32,7 +32,7 @@
         "restartAdapters":          ["vis"]
     },
     "native": {
-        "test1": true,
+        "token": "",
         "test2": 42
     },
     "objects": [
