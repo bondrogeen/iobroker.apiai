@@ -2,6 +2,8 @@
 
 var utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 var adapter = utils.adapter('apiai');
+var apiai = require('apiai');
+
 
 adapter.on('unload', function (callback) {
     try {
@@ -47,22 +49,33 @@ adapter.on('ready', function () {
 });
 
 function main() {
+    apiai("привет")
+    adapter.log.info('config test1: ' + adapter.config.token);
 
-    adapter.log.info('config test1: ' + adapter.config.test1);
-    adapter.log.info('config test1: ' + adapter.config.test2);
+}
 
-    adapter.setObject('testVariable', {
-        type: 'state',
-        common: {
-            name: 'testVariable',
-            type: 'boolean',
-            role: 'indicator'
-        },
-        native: {}
-    });
+function apiai(textRequest) {
 
+    if(adapter.config.token){
 
-    adapter.subscribeStates('*');
+        var app = apiai(adapter.config.token);
+
+        var request = app.textRequest(textRequest, {
+            sessionId: '1234567'
+        });
+
+        request.on('response', function(response) {
+            adapter.log.info(JSON.stringify(response));
+        });
+
+        request.on('error', function(error) {
+            adapter.log.info(JSON.stringify(error));
+
+        });
+
+        request.end();
+    }
+
 
 }
 
