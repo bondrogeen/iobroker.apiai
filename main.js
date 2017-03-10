@@ -23,7 +23,7 @@ adapter.on('objectChange', function (id, obj) {
 
 adapter.on('stateChange', function (id, state) {
     // Warning, state can be null if it was deleted
-    adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
+    //adapter.log.info('stateChange ' + id + ' ' + JSON.stringify(state));
     if(id==adapter.namespace +'.request.request'){
         setapiai(state.val);
     }
@@ -49,7 +49,7 @@ adapter.on('ready', function () {
         main();
         setapiai('привет');
     }else{
-        adapter.log.info('Not a valid token' );
+        adapter.log.info('Not correct or not a token' );
     }
 
 });
@@ -85,13 +85,24 @@ function setapiai(textRequest) {
     });
 
     request.on('response', function(response) {
-        adapter.log.info("respons "+JSON.stringify(response));
+        //adapter.log.info("respons "+JSON.stringify(response));
         adapter.setState('respons.respons', {val: JSON.stringify(response), ack: true});
+        if(response.result.parameters && response.result.actionIncomplete===false){
+            adapter.log.info("response.result.parameters "+JSON.stringify(response.result.parameters));
+            newVar("respons", "parameters")
+            adapter.setState('respons.parameters', {val: JSON.stringify(response.result.parameters), ack: true});
+        }
+        if(response.result.fulfillment.speech){
+            newVar("respons", "speech")
+            adapter.setState('respons.speech', {val: response.result.fulfillment.speech, ack: true});
+            //adapter.log.info("speech "+response.result.fulfillment.speech);
+        }
 
         JSON.parse(JSON.stringify(response), function(k, v) {
-            if(typeof v != "object"){
-                newVar("respons.test",k)
-                adapter.setState('respons.test.'+k, {val: v, ack: true});
+
+            if(typeof v != "object") {
+                newVar("respons.test", k)
+                adapter.setState('respons.test.' + k, {val: v, ack: true});
             }
         });
     });
@@ -104,5 +115,3 @@ function setapiai(textRequest) {
     request.end();
 
 }
-
-
